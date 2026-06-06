@@ -32,6 +32,7 @@ input,select,textarea{font-family:var(--f-sans)}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 @keyframes slideRight{from{transform:translateX(100%)}to{transform:translateX(0)}}
 @keyframes slideLeft{from{transform:translateX(-100%)}to{transform:translateX(0)}}
+@keyframes countSlideDown{0%{opacity:0;transform:translateY(-16px)}55%{opacity:1}100%{opacity:1;transform:translateY(0)}}
 @keyframes pulse2{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.93)}}
 @keyframes marq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
@@ -133,8 +134,11 @@ input,select,textarea{font-family:var(--f-sans)}
 .countdown-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:36px auto 34px;max-width:640px}
 .countdown-box{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);border-radius:var(--r);padding:20px 10px}
 .countdown-num{font-family:var(--f-mono);font-weight:700;font-size:clamp(28px,6vw,56px);line-height:1;color:#fff}
+.countdown-num.count-slide-down{animation:countSlideDown .34s cubic-bezier(.22,1,.36,1) both}
+.cd-num.count-slide-down{animation:countSlideDown .34s cubic-bezier(.22,1,.36,1) both}
 .countdown-label{font-size:10px;color:rgba(255,255,255,.5);margin-top:8px;letter-spacing:2px;text-transform:uppercase}
 @media(max-width:520px){.countdown-page{padding-top:92px}.countdown-bg img{width:108vw;max-height:30svh}.countdown-grid{grid-template-columns:1fr 1fr}.countdown-box{padding:16px 8px}}
+@media(prefers-reduced-motion:reduce){.countdown-num.count-slide-down,.cd-num.count-slide-down{animation:none}}
 </style>
 </head>
 <body>
@@ -201,7 +205,6 @@ input,select,textarea{font-family:var(--f-sans)}
           <div class="countdown-label">Seconds</div>
         </div>
       </div>
-      <button id="launch-cd-btn" onclick="goPage('drops')" class="fade-up-4" style="background:#fff;color:#000;border:none;padding:14px 32px;border-radius:var(--r);font-weight:800;font-size:14px;letter-spacing:.8px;text-transform:uppercase">View Comeback Drop</button>
     </div>
   </section>
 </div>
@@ -227,7 +230,7 @@ input,select,textarea{font-family:var(--f-sans)}
         NEXA Comeback Tee. Limited drop, front and back print, built for the return.
       </p>
       <div class="hero-cta fade-up-4">
-        <button onclick="goPage('countdown')" style="background:#fff;color:#000;border:none;padding:14px 32px;border-radius:var(--r);font-weight:800;font-size:14px;letter-spacing:.8px;text-transform:uppercase">Comeback Drop</button>
+        <button onclick="goPage('drops')" style="background:#fff;color:#000;border:none;padding:14px 32px;border-radius:var(--r);font-weight:800;font-size:14px;letter-spacing:.8px;text-transform:uppercase">Comeback Drop</button>
         <button onclick="goPage('delivery')" style="background:transparent;color:#fff;border:2px solid rgba(255,255,255,.72);padding:12px 28px;border-radius:var(--r);font-weight:800;font-size:14px;letter-spacing:.8px;text-transform:uppercase">Delivery Info</button>
       </div>
     </div>
@@ -545,8 +548,49 @@ const LAUNCH_COUNTDOWN_KEY = 'nexa_comeback_countdown_target';
 const LAUNCH_COUNTDOWN_TARGET = Date.parse('2026-06-09T00:00:00+01:00');
 let launchCountdownInterval = null;
 
+function pageFromPath() {
+  const path = window.location.pathname.replace(/\/+$/,'').toLowerCase();
+  if (path === '') return 'countdown';
+  if (path === '/home') return 'home';
+  if (path === '/store') return 'drops';
+  if (path === '/drop') return 'drops';
+  if (path === '/drops') return 'drops';
+  if (path === '/delivery') return 'delivery';
+  if (path === '/checkout') return 'checkout';
+  if (path === '/product-detail') return 'product-detail';
+  if (path === '/admin') return 'admin';
+  return null;
+}
+
+function updatePathForPage(p, replace = false) {
+  const currentPath = window.location.pathname.replace(/\/+$/,'').toLowerCase() || '/';
+  const acceptedPaths = {
+    countdown: ['/'],
+    home: ['/home'],
+    drops: ['/drop','/store','/drops'],
+    delivery: ['/delivery'],
+    checkout: ['/checkout'],
+    'product-detail': ['/product-detail'],
+    admin: ['/admin']
+  };
+  const paths = {
+    countdown: '/',
+    home: '/home',
+    drops: '/drop',
+    delivery: '/delivery',
+    checkout: '/checkout',
+    'product-detail': '/product-detail',
+    admin: '/admin'
+  };
+  const path = paths[p] || '/';
+  if ((acceptedPaths[p] || [path]).includes(currentPath)) return;
+  const state = { page: p };
+  if (replace) history.replaceState(state, '', path);
+  else history.pushState(state, '', path);
+}
+
 /* ══ NAV ══ */
-function goPage(p) {
+function goPage(p, replacePath = false) {
   if (p === '__back__') {
     document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
     const target = document.getElementById('page-' + prevPage) || document.getElementById('page-drops');
@@ -562,14 +606,16 @@ function goPage(p) {
   }
 
   if (p === 'countdown' && !shouldShowLaunchCountdown()) {
-    goPage('home');
+    goPage('home', replacePath);
     return;
   }
 
-  if (shouldShowLaunchCountdown() && p !== 'countdown') {
-    goPage('countdown');
+  if (shouldShowLaunchCountdown() && ['drops','product-detail','checkout'].includes(p)) {
+    goPage('countdown', replacePath);
     return;
   }
+
+  updatePathForPage(p, replacePath);
 
   const nav = document.getElementById('navbar');
   const footer = document.getElementById('main-footer');
@@ -600,6 +646,21 @@ function goPage(p) {
     fab.style.display = 'none';
     currentPage = 'admin';
     return;
+  }
+
+  if (p === 'checkout') {
+    document.getElementById('page-checkout').classList.add('active');
+    nav.style.display = 'flex';
+    footer.style.display = 'none';
+    fab.style.display = 'flex';
+    currentPage = 'checkout';
+    window.scrollTo(0,0);
+    return;
+  }
+
+  if (p === 'product-detail' && !document.getElementById('product-detail-content').innerHTML.trim()) {
+    const firstProduct = products[0];
+    if (firstProduct) renderProductDetail(firstProduct);
   }
 
   nav.style.display = 'flex';
@@ -690,9 +751,9 @@ function productCardHTML(p) {
   <div class="product-card" onclick="openProductDetail(${p.id})" style="cursor:pointer">
     <div style="height:200px;background:linear-gradient(135deg,${c1},${c2});position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden">
       ${mediaHTML}
-      ${p.soldOut
-        ? `<div style="position:absolute;inset:0;background:rgba(0,0,0,.65);display:flex;align-items:center;justify-content:center"><span class="tag tag-sold">Sold Out</span></div>`
-        : `<span class="tag tag-live" style="position:absolute;top:12px;left:12px;z-index:5">${p.category}</span>`}
+      <span class="tag ${p.soldOut ? 'tag-sold' : 'tag-live'}" style="position:absolute;top:12px;left:12px;z-index:5">
+        ${p.soldOut ? 'Sold Out' : p.category}
+      </span>
     </div>
     <div style="padding:16px 16px 18px">
       <div style="font-weight:800;font-size:15px;margin-bottom:2px;letter-spacing:.2px">${p.name}</div>
@@ -749,7 +810,7 @@ function renderProductDetail(p) {
           </div>`).join('')}
         </div>
         <div class="product-detail-sidebar" style="position:sticky;top:84px">
-          <div class="tag tag-live" style="margin-bottom:18px">${p.category}</div>
+          <div class="tag ${p.soldOut ? 'tag-sold' : 'tag-live'}" style="margin-bottom:18px">${p.soldOut ? 'Sold Out' : p.category}</div>
           <h1 style="font-family:var(--f-display);font-size:clamp(54px,7vw,96px);line-height:.9;letter-spacing:2px;margin-bottom:18px">${p.name.toUpperCase()}</h1>
           <div style="font-family:var(--f-mono);font-size:28px;font-weight:700;margin-bottom:24px">${p.price} TND</div>
           <p style="font-size:15px;line-height:1.8;color:var(--grey);font-weight:500;margin-bottom:28px">
@@ -831,7 +892,7 @@ function dropHTML(d) {
           <div class="cd-grid" id="cd-${d.id}">
             ${['d','h','m','s'].map((k,i)=>`
             <div style="background:var(--white);border-radius:var(--r);padding:10px 14px;text-align:center;min-width:54px;border:1.5px solid var(--grey3)">
-              <div style="font-family:var(--f-mono);font-size:20px;font-weight:700;color:var(--black)" id="cd-${d.id}-${k}">--</div>
+              <div class="cd-num" style="font-family:var(--f-mono);font-size:20px;font-weight:700;color:var(--black)" id="cd-${d.id}-${k}">--</div>
               <div style="font-size:9px;color:var(--grey);margin-top:2px;letter-spacing:1px;text-transform:uppercase">${['DAYS','HRS','MIN','SEC'][i]}</div>
             </div>`).join('')}
           </div>`}
@@ -846,11 +907,25 @@ function dropHTML(d) {
   </div>`;
 }
 
+function updateCountdownDigit(id, value) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const next = String(value).padStart(2,'0');
+  const prev = el.textContent;
+  if (prev === next) return;
+  el.textContent = next;
+  if (prev && prev !== '--') {
+    el.classList.remove('count-slide-down');
+    void el.offsetWidth;
+    el.classList.add('count-slide-down');
+  }
+}
+
 function startCountdown(id, dateStr) {
   const tick = () => {
     const diff = new Date(dateStr) - new Date();
     if (diff <= 0) { clearInterval(countdownIntervals[id]); return; }
-    const set = (k, v) => { const el = document.getElementById(`cd-${id}-${k}`); if (el) el.textContent = String(v).padStart(2,'0'); };
+    const set = (k, v) => updateCountdownDigit(`cd-${id}-${k}`, v);
     set('d', Math.floor(diff/86400000));
     set('h', Math.floor((diff%86400000)/3600000));
     set('m', Math.floor((diff%3600000)/60000));
@@ -872,10 +947,7 @@ function startLaunchCountdown() {
     finishLaunchCountdown();
     return;
   }
-  const set = (k, v) => {
-    const el = document.getElementById(`launch-cd-${k}`);
-    if (el) el.textContent = String(v).padStart(2,'0');
-  };
+  const set = (k, v) => updateCountdownDigit(`launch-cd-${k}`, v);
   const tick = () => {
     const diff = Math.max(0, target - Date.now());
     set('d', Math.floor(diff/86400000));
@@ -969,6 +1041,7 @@ function closeCart() {
 function goCheckout() {
   prevPage = currentPage;
   closeCart();
+  updatePathForPage('checkout');
   const sub = cart.reduce((s,i) => s + i.price*i.qty, 0);
   document.getElementById('checkout-summary').innerHTML = `
     <div style="font-family:var(--f-mono);font-size:10px;color:var(--grey);letter-spacing:2px;margin-bottom:14px;text-transform:uppercase">Order Summary</div>
@@ -1213,7 +1286,10 @@ function adminDelOrder(id) {
 }
 
 /* ══ INIT ══ */
-goPage(shouldShowLaunchCountdown() ? 'countdown' : 'home');
+window.addEventListener('popstate', () => {
+  goPage(pageFromPath() || 'countdown', true);
+});
+goPage(pageFromPath() || 'countdown', true);
 </script>
 </body>
 </html>

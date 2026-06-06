@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    { "source": "/home", "destination": "/index.html" },
+    { "source": "/store", "destination": "/index.html" },
+    { "source": "/drop", "destination": "/index.html" },
+    { "source": "/drops", "destination": "/index.html" },
+    { "source": "/delivery", "destination": "/index.html" },
+    { "source": "/checkout", "destination": "/index.html" },
+    { "source": "/product-detail", "destination": "/index.html" },
+    { "source": "/admin", "destination": "/index.html" }
+  ]
+}
