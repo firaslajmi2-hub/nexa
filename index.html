@@ -675,7 +675,10 @@ function goPage(p, replacePath = false) {
   if (nb) nb.classList.add('active');
 
   currentPage = p;
-  if (p === 'home') renderFeatured();
+  if (p === 'home') {
+    renderFeatured();
+    restartHomeHeroAnimations();
+  }
   if (p === 'countdown') startLaunchCountdown();
   if (p === 'drops') renderDrops();
 }
@@ -862,6 +865,23 @@ function selectProductSize(event) {
 function renderFeatured() {
   const featured = products.slice(0, 3);
   document.getElementById('featured-grid').innerHTML = featured.map(productCardHTML).join('');
+}
+
+function restartHomeHeroAnimations() {
+  const pageHome = document.getElementById('page-home');
+  if (!pageHome) return;
+
+  const targets = pageHome.querySelectorAll('.fade-up,.fade-up-2,.fade-up-3,.fade-up-4');
+  targets.forEach(el => {
+    // Remove animation classes
+    const classes = Array.from(el.classList).filter(c => c.startsWith('fade-up'));
+    if (!classes.length) return;
+
+    classes.forEach(c => el.classList.remove(c));
+    // Force reflow so animations restart
+    void el.offsetWidth;
+    classes.forEach(c => el.classList.add(c));
+  });
 }
 
 /* ══ DROPS ══ */
