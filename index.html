@@ -125,6 +125,16 @@ input,select,textarea{font-family:var(--f-sans)}
 .home-hero-content{max-width:760px;position:relative;z-index:1}
 .home-hero-stats{position:absolute;bottom:40px;right:clamp(16px,5vw,60px);display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;z-index:1}
 @media(max-width:760px){.home-hero{min-height:auto;display:block;padding-top:92px}.home-hero-media{position:absolute;inset:0;padding:0 18px;z-index:-2}.home-hero-media img{width:108vw;max-height:30svh;opacity:.14}.home-hero-shade{background:rgba(0,0,0,.68)}.home-hero-stats{position:relative;bottom:auto;right:auto;margin-top:28px;justify-content:flex-start}}
+.countdown-page{min-height:100svh;background:#050505;color:#fff;display:flex;align-items:center;justify-content:center;padding:100px clamp(16px,5vw,80px) 72px;position:relative;overflow:hidden;isolation:isolate}
+.countdown-bg{position:absolute;inset:0;z-index:-2;display:flex;align-items:center;justify-content:center;padding:0 clamp(16px,5vw,80px)}
+.countdown-bg img{width:min(86vw,1120px);max-height:46svh;object-fit:contain;opacity:.12;filter:drop-shadow(0 24px 48px rgba(0,0,0,.7))}
+.countdown-page::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at center,rgba(255,255,255,.08),transparent 46%),rgba(0,0,0,.7);z-index:-1}
+.countdown-shell{text-align:center;width:min(900px,100%);position:relative;z-index:1}
+.countdown-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:36px auto 34px;max-width:640px}
+.countdown-box{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);border-radius:var(--r);padding:20px 10px}
+.countdown-num{font-family:var(--f-mono);font-weight:700;font-size:clamp(28px,6vw,56px);line-height:1;color:#fff}
+.countdown-label{font-size:10px;color:rgba(255,255,255,.5);margin-top:8px;letter-spacing:2px;text-transform:uppercase}
+@media(max-width:520px){.countdown-page{padding-top:92px}.countdown-bg img{width:108vw;max-height:30svh}.countdown-grid{grid-template-columns:1fr 1fr}.countdown-box{padding:16px 8px}}
 </style>
 </head>
 <body>
@@ -136,7 +146,7 @@ input,select,textarea{font-family:var(--f-sans)}
   </button>
   <div class="desktop-nav" style="display:flex;align-items:center;gap:36px">
     <button class="nav-link" id="nav-home" onclick="goPage('home')">Home</button>
-    <button class="nav-link" id="nav-drops" onclick="goPage('drops')">Comeback Drop</button>
+    <button class="nav-link" id="nav-countdown" onclick="goPage('countdown')">Comeback Drop</button>
     <button class="nav-link" id="nav-delivery" onclick="goPage('delivery')">Delivery</button>
   </div>
   <div style="display:flex;align-items:center;gap:10px">
@@ -157,8 +167,43 @@ input,select,textarea{font-family:var(--f-sans)}
 <div id="mobile-drawer" class="mobile-nav-drawer" style="position:fixed;top:0;left:0;bottom:0;width:260px;background:var(--white);z-index:300;padding:80px 28px 40px;display:none;flex-direction:column;gap:4px;box-shadow:6px 0 40px rgba(0,0,0,.15);border-right:1px solid var(--grey3)">
   <div style="margin-bottom:28px"><span class="brand-logo" aria-label="NEXA"><img src="nexa-logo.png" alt="NEXA"/></span></div>
   <button onclick="goPage('home');closeMobileMenu()" id="mnav-home" style="background:none;border:none;text-align:left;padding:14px 12px;border-radius:var(--r);font-size:16px;font-weight:700;color:var(--black);letter-spacing:.5px;text-transform:uppercase">Home</button>
-  <button onclick="goPage('drops');closeMobileMenu()" id="mnav-drops" style="background:none;border:none;text-align:left;padding:14px 12px;border-radius:var(--r);font-size:16px;font-weight:700;color:var(--black);letter-spacing:.5px;text-transform:uppercase">Comeback Drop</button>
+  <button onclick="goPage('countdown');closeMobileMenu()" id="mnav-countdown" style="background:none;border:none;text-align:left;padding:14px 12px;border-radius:var(--r);font-size:16px;font-weight:700;color:var(--black);letter-spacing:.5px;text-transform:uppercase">Comeback Drop</button>
   <button onclick="goPage('delivery');closeMobileMenu()" id="mnav-delivery" style="background:none;border:none;text-align:left;padding:14px 12px;border-radius:var(--r);font-size:16px;font-weight:700;color:var(--black);letter-spacing:.5px;text-transform:uppercase">Delivery</button>
+</div>
+
+<!-- ══ COUNTDOWN PAGE ══ -->
+<div id="page-countdown" class="page">
+  <section class="countdown-page">
+    <div class="countdown-bg" aria-hidden="true">
+      <img src="nexa-logo.png" alt=""/>
+    </div>
+    <div class="countdown-shell">
+      <div class="tag fade-up" style="margin-bottom:28px;background:#fff;color:#000">
+        <span class="pulse-dot"></span>
+        Launch Countdown
+      </div>
+      <h2 class="fade-up-2" style="font-family:var(--f-display);font-size:clamp(64px,13vw,150px);line-height:.88;letter-spacing:2px">COMEBACK DROP</h2>
+      <div class="countdown-grid fade-up-3" aria-label="Comeback Drop countdown">
+        <div class="countdown-box">
+          <div class="countdown-num" id="launch-cd-d">--</div>
+          <div class="countdown-label">Days</div>
+        </div>
+        <div class="countdown-box">
+          <div class="countdown-num" id="launch-cd-h">--</div>
+          <div class="countdown-label">Hours</div>
+        </div>
+        <div class="countdown-box">
+          <div class="countdown-num" id="launch-cd-m">--</div>
+          <div class="countdown-label">Minutes</div>
+        </div>
+        <div class="countdown-box">
+          <div class="countdown-num" id="launch-cd-s">--</div>
+          <div class="countdown-label">Seconds</div>
+        </div>
+      </div>
+      <button id="launch-cd-btn" onclick="goPage('drops')" class="fade-up-4" style="background:#fff;color:#000;border:none;padding:14px 32px;border-radius:var(--r);font-weight:800;font-size:14px;letter-spacing:.8px;text-transform:uppercase">View Comeback Drop</button>
+    </div>
+  </section>
 </div>
 
 <!-- ══ HOME PAGE ══ -->
@@ -182,7 +227,7 @@ input,select,textarea{font-family:var(--f-sans)}
         NEXA Comeback Tee. Limited drop, front and back print, built for the return.
       </p>
       <div class="hero-cta fade-up-4">
-        <button onclick="goPage('drops')" style="background:#fff;color:#000;border:none;padding:14px 32px;border-radius:var(--r);font-weight:800;font-size:14px;letter-spacing:.8px;text-transform:uppercase">Shop Comeback Drop</button>
+        <button onclick="goPage('countdown')" style="background:#fff;color:#000;border:none;padding:14px 32px;border-radius:var(--r);font-weight:800;font-size:14px;letter-spacing:.8px;text-transform:uppercase">Comeback Drop</button>
         <button onclick="goPage('delivery')" style="background:transparent;color:#fff;border:2px solid rgba(255,255,255,.72);padding:12px 28px;border-radius:var(--r);font-weight:800;font-size:14px;letter-spacing:.8px;text-transform:uppercase">Delivery Info</button>
       </div>
     </div>
@@ -229,7 +274,7 @@ input,select,textarea{font-family:var(--f-sans)}
         <div style="font-family:var(--f-mono);font-size:10px;color:var(--grey);margin-bottom:8px;letter-spacing:2px;text-transform:uppercase">// Featured</div>
         <h2 style="font-family:var(--f-display);font-size:clamp(40px,6vw,64px);letter-spacing:2px">COMEBACK DROP</h2>
       </div>
-      <button onclick="goPage('drops')" class="btn-ghost" style="font-weight:700;font-size:13px;letter-spacing:.5px;text-transform:uppercase">View Comeback Drop →</button>
+      <button onclick="goPage('countdown')" class="btn-ghost" style="font-weight:700;font-size:13px;letter-spacing:.5px;text-transform:uppercase">View Comeback Drop →</button>
     </div>
     <div id="featured-grid" class="product-grid"></div>
   </section>
@@ -496,6 +541,9 @@ let prevPage    = 'drops';
 let adminAuth   = false;
 let adminCurrentTab = 'products';
 const countdownIntervals = {};
+const LAUNCH_COUNTDOWN_KEY = 'nexa_comeback_countdown_target';
+const LAUNCH_COUNTDOWN_DAYS = 5;
+let launchCountdownInterval = null;
 
 /* ══ NAV ══ */
 function goPage(p) {
@@ -513,11 +561,32 @@ function goPage(p) {
     return;
   }
 
+  if (p === 'countdown' && !shouldShowLaunchCountdown()) {
+    goPage('home');
+    return;
+  }
+
+  if (shouldShowLaunchCountdown() && p !== 'countdown') {
+    goPage('countdown');
+    return;
+  }
+
   const nav = document.getElementById('navbar');
   const footer = document.getElementById('main-footer');
   const fab = document.getElementById('admin-fab');
 
   document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
+
+  if (p === 'countdown') {
+    document.getElementById('page-countdown').classList.add('active');
+    nav.style.display = 'none';
+    footer.style.display = 'none';
+    fab.style.display = 'none';
+    currentPage = 'countdown';
+    startLaunchCountdown();
+    window.scrollTo(0,0);
+    return;
+  }
 
   if (p === 'admin') {
     if (!adminAuth) {
@@ -546,6 +615,7 @@ function goPage(p) {
 
   currentPage = p;
   if (p === 'home') renderFeatured();
+  if (p === 'countdown') startLaunchCountdown();
   if (p === 'drops') renderDrops();
 }
 
@@ -788,6 +858,52 @@ function startCountdown(id, dateStr) {
   };
   tick();
   countdownIntervals[id] = setInterval(tick, 1000);
+}
+
+function getLaunchCountdownTarget() {
+  let target = Number(store.get(LAUNCH_COUNTDOWN_KEY));
+  if (!target || Number.isNaN(target)) {
+    target = Date.now() + LAUNCH_COUNTDOWN_DAYS * 86400000;
+    store.set(LAUNCH_COUNTDOWN_KEY, target);
+  }
+  return target;
+}
+
+function startLaunchCountdown() {
+  if (launchCountdownInterval) clearInterval(launchCountdownInterval);
+  const target = getLaunchCountdownTarget();
+  if (Date.now() >= target) {
+    finishLaunchCountdown();
+    return;
+  }
+  const set = (k, v) => {
+    const el = document.getElementById(`launch-cd-${k}`);
+    if (el) el.textContent = String(v).padStart(2,'0');
+  };
+  const tick = () => {
+    const diff = Math.max(0, target - Date.now());
+    set('d', Math.floor(diff/86400000));
+    set('h', Math.floor((diff%86400000)/3600000));
+    set('m', Math.floor((diff%3600000)/60000));
+    set('s', Math.floor((diff%60000)/1000));
+    const btn = document.getElementById('launch-cd-btn');
+    if (btn && diff <= 0) btn.textContent = 'Shop Comeback Drop';
+    if (diff <= 0) finishLaunchCountdown();
+  };
+  tick();
+  launchCountdownInterval = setInterval(tick, 1000);
+}
+
+function finishLaunchCountdown() {
+  if (launchCountdownInterval) clearInterval(launchCountdownInterval);
+  launchCountdownInterval = null;
+  const page = document.getElementById('page-countdown');
+  if (page) page.remove();
+  goPage('home');
+}
+
+function shouldShowLaunchCountdown() {
+  return Date.now() < getLaunchCountdownTarget();
 }
 
 /* ══ CART ══ */
@@ -1101,7 +1217,7 @@ function adminDelOrder(id) {
 }
 
 /* ══ INIT ══ */
-goPage('home');
+goPage(shouldShowLaunchCountdown() ? 'countdown' : 'home');
 </script>
 </body>
 </html>
