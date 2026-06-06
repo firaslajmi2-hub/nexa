@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>NEXA — TN Streetwear</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#F7F7F5;--bg2:#EFEFED;--black:#0A0A0A;--black2:#1A1A1A;--black3:#2A2A2A;
+  --white:#FFFFFF;--grey:#6B6B6B;--grey2:#B0B0B0;--grey3:#E0E0DE;
+  --accent:#0A0A0A;--accent-inv:#FFFFFF;
+  --f-display:'Bebas Neue',sans-serif;
+  --f-sans:'Space Grotesk',sans-serif;
+  --f-mono:'Space Mono',monospace;
+  --r:4px;
+  --shadow:0 1px 8px rgba(0,0,0,.08);
+  --shadow-lg:0 6px 32px rgba(0,0,0,.18);
+}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
+body{background:var(--bg);color:var(--black);font-family:var(--f-sans);min-height:100vh}
+button{font-family:var(--f-sans);cursor:pointer}
+input,select,textarea{font-family:var(--f-sans)}
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--black);border-radius:0}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideRight{from{transform:translateX(100%)}to{transform:translateX(0)}}
+@keyframes slideLeft{from{transform:translateX(-100%)}to{transform:translateX(0)}}
+@keyframes pulse2{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.93)}}
+@keyframes marq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+.fade-up{animation:fadeUp .5s cubic-bezier(.22,1,.36,1) both}
+.fade-up-2{animation:fadeUp .5s .1s cubic-bezier(.22,1,.36,1) both}
+.fade-up-3{animation:fadeUp .5s .2s cubic-bezier(.22,1,.36,1) both}
+.fade-up-4{animation:fadeUp .5s .3s cubic-bezier(.22,1,.36,1) both}
+
+/* ── buttons ── */
+.btn-primary{background:var(--black);color:#fff;border:none;padding:14px 32px;border-radius:var(--r);font-weight:700;font-size:14px;letter-spacing:.8px;text-transform:uppercase;transition:background .15s,transform .1s}
+.btn-primary:hover{background:var(--black3);transform:translateY(-1px)}
+.btn-primary:active{transform:translateY(0)}
+.btn-primary:disabled{opacity:.35;cursor:not-allowed;transform:none}
+
+.btn-outline{background:transparent;color:var(--black);border:2px solid var(--black);padding:12px 28px;border-radius:var(--r);font-weight:700;font-size:14px;letter-spacing:.8px;text-transform:uppercase;transition:background .15s,color .15s}
+.btn-outline:hover{background:var(--black);color:#fff}
+
+.btn-ghost{background:transparent;border:none;color:var(--grey);font-size:14px;font-weight:600;transition:color .15s}
+.btn-ghost:hover{color:var(--black)}
+
+/* ── card ── */
+.product-card{background:var(--white);border-radius:var(--r);overflow:hidden;border:1.5px solid var(--grey3);transition:transform .2s,box-shadow .2s,border-color .2s}
+.product-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);border-color:var(--black)}
+
+/* ── field ── */
+.field{width:100%;background:var(--white);border:1.5px solid var(--grey3);border-radius:var(--r);padding:13px 16px;font-size:15px;color:var(--black);outline:none;transition:border-color .15s}
+.field:focus{border-color:var(--black)}
+.field::placeholder{color:var(--grey2)}
+
+/* ── nav link ── */
+.nav-link{background:none;border:none;font-size:13px;font-weight:700;color:var(--grey);padding:4px 0;position:relative;letter-spacing:.8px;text-transform:uppercase;transition:color .15s}
+.nav-link::after{content:'';position:absolute;bottom:-2px;left:0;right:0;height:2px;background:var(--black);transform:scaleX(0);transform-origin:left;transition:transform .18s}
+.nav-link.active,.nav-link:hover{color:var(--black)}
+.nav-link.active::after,.nav-link:hover::after{transform:scaleX(1)}
+
+/* ── tag ── */
+.tag{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-family:var(--f-mono);letter-spacing:.6px;text-transform:uppercase;padding:3px 8px;border-radius:2px;font-weight:700}
+.tag-live{background:var(--black);color:#fff}
+.tag-soon{background:var(--grey3);color:var(--grey)}
+.tag-sold{background:#111;color:#fff}
+.tag-accent{background:var(--black);color:#fff}
+
+/* ── overlay ── */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(3px);z-index:200;animation:fadeIn .2s}
+
+/* ── responsive ── */
+@media(max-width:680px){.desktop-nav{display:none!important}.mobile-menu-btn{display:flex!important}}
+@media(min-width:681px){.mobile-nav-drawer{display:none!important}.mobile-menu-btn{display:none!important}}
+
+.product-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+@media(max-width:480px){.product-grid{grid-template-columns:1fr 1fr;gap:10px}}
+
+.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--grey3)}
+.stats-grid>div{background:var(--black)}
+
+.delivery-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:560px){.delivery-grid{grid-template-columns:1fr}}
+
+.how-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media(max-width:680px){.how-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:380px){.how-grid{grid-template-columns:1fr}}
+
+.admin-form-row{display:grid;grid-template-columns:2fr 1fr 1fr;gap:12px}
+@media(max-width:600px){.admin-form-row{grid-template-columns:1fr}}
+
+.admin-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+@media(max-width:600px){.admin-stats{grid-template-columns:repeat(2,1fr)}}
+
+.product-detail-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(320px,.9fr);gap:clamp(24px,5vw,64px);align-items:start}
+@media(max-width:780px){.product-detail-grid{grid-template-columns:1fr!important}.product-detail-sidebar{position:static!important}.product-detail-gallery>div{min-height:260px!important}}
+
+.hero-cta{display:flex;gap:12px;flex-wrap:wrap}
+.cd-grid{display:flex;gap:6px;flex-wrap:wrap}
+
+/* pages */
+.page{display:none!important}
+.page.active{display:block!important}
+.page.active.flex-page{display:flex!important}
+
+/* pulse dot */
+.pulse-dot{width:6px;height:6px;border-radius:50%;background:#fff;display:inline-block;animation:pulse2 1.4s infinite}
+.pulse-dot-white{width:7px;height:7px;border-radius:50%;background:#fff;display:inline-block;animation:pulse2 1.2s infinite}
+.brand-logo{display:inline-flex;align-items:center;justify-content:center;background:#000;height:36px;width:118px;padding:6px 9px;border-radius:0}
+.brand-logo img{display:block;width:100%;height:100%;object-fit:contain}
+.brand-logo-sm{height:28px;width:96px;padding:5px 8px}
+.brand-logo-lg{height:46px;width:150px;padding:8px 12px}
+.home-hero{min-height:100svh;display:flex;align-items:center;padding:110px clamp(16px,5vw,80px) 72px;background:#050505;color:#fff;position:relative;overflow:hidden;border-bottom:1px solid #171717;isolation:isolate}
+.home-hero-media{position:absolute;inset:0;z-index:-2;display:flex;align-items:center;justify-content:center;padding:0 clamp(16px,5vw,80px)}
+.home-hero-media img{width:min(86vw,1120px);max-height:46svh;object-fit:contain;opacity:.18;filter:drop-shadow(0 24px 48px rgba(0,0,0,.7))}
+.home-hero-shade{position:absolute;inset:0;background:radial-gradient(circle at center,rgba(255,255,255,.08),transparent 46%),rgba(0,0,0,.62);z-index:-1}
+.home-hero-content{max-width:760px;position:relative;z-index:1}
+.home-hero-stats{position:absolute;bottom:40px;right:clamp(16px,5vw,60px);display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;z-index:1}
+@media(max-width:760px){.home-hero{min-height:auto;display:block;padding-top:92px}.home-hero-media{position:absolute;inset:0;padding:0 18px;z-index:-2}.home-hero-media img{width:108vw;max-height:30svh;opacity:.14}.home-hero-shade{background:rgba(0,0,0,.68)}.home-hero-stats{position:relative;bottom:auto;right:auto;margin-top:28px;justify-content:flex-start}}
+</style>
+</head>
+<body>
+
+<!-- ══ NAVBAR ══ -->
+<nav id="navbar" style="position:fixed;top:0;left:0;right:0;z-index:100;background:transparent;border-bottom:1px solid transparent;transition:all .3s ease;padding:0 clamp(16px,4vw,48px);height:60px;display:flex;align-items:center;justify-content:space-between;">
+  <button onclick="goPage('home')" style="background:none;border:none;padding:0">
+    <span class="brand-logo" aria-label="NEXA"><img src="nexa-logo.png" alt="NEXA"/></span>
+  </button>
+  <div class="desktop-nav" style="display:flex;align-items:center;gap:36px">
+    <button class="nav-link" id="nav-home" onclick="goPage('home')">Home</button>
+    <button class="nav-link" id="nav-drops" onclick="goPage('drops')">Comeback Drop</button>
+    <button class="nav-link" id="nav-delivery" onclick="goPage('delivery')">Delivery</button>
+  </div>
+  <div style="display:flex;align-items:center;gap:10px">
+    <button id="cart-btn" onclick="openCart()" style="background:var(--black);color:#fff;border:none;border-radius:var(--r);padding:9px 18px;font-size:13px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;display:flex;align-items:center;gap:8px;transition:background .15s">
+      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+      <span id="cart-count" style="display:none">0</span>
+    </button>
+    <button class="mobile-menu-btn" onclick="openMobileMenu()" style="background:none;border:1.5px solid var(--grey3);border-radius:var(--r);padding:8px 10px;display:none;align-items:center;gap:3px;flex-direction:column">
+      <span style="width:18px;height:2px;background:var(--black);display:block"></span>
+      <span style="width:18px;height:2px;background:var(--black);display:block"></span>
+      <span style="width:12px;height:2px;background:var(--black);display:block"></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile drawer -->
+<div id="mobile-overlay" class="overlay" onclick="closeMobileMenu()" style="display:none"></div>
+<div id="mobile-drawer" class="mobile-nav-drawer" style="position:fixed;top:0;left:0;bottom:0;width:260px;background:var(--white);z-index:300;padding:80px 28px 40px;display:none;flex-direction:column;gap:4px;box-shadow:6px 0 40px rgba(0,0,0,.15);border-right:1px solid var(--grey3)">
+  <div style="margin-bottom:28px"><span class="brand-logo" aria-label="NEXA"><img src="nexa-logo.png" alt="NEXA"/></span></div>
+  <button onclick="goPage('home');closeMobileMenu()" id="mnav-home" style="background:none;border:none;text-align:left;padding:14px 12px;border-radius:var(--r);font-size:16px;font-weight:700;color:var(--black);letter-spacing:.5px;text-transform:uppercase">Home</button>
+  <button onclick="goPage('drops');closeMobileMenu()" id="mnav-drops" style="background:none;border:none;text-align:left;padding:14px 12px;border-radius:var(--r);font-size:16px;font-weight:700;color:var(--black);letter-spacing:.5px;text-transform:uppercase">Comeback Drop</button>
+  <button onclick="goPage('delivery');closeMobileMenu()" id="mnav-delivery" style="background:none;border:none;text-align:left;padding:14px 12px;border-radius:var(--r);font-size:16px;font-weight:700;color:var(--black);letter-spacing:.5px;text-transform:uppercase">Delivery</button>
+</div>
+
+<!-- ══ HOME PAGE ══ -->
+<div id="page-home" class="page active">
+  <!-- Hero -->
+  <section class="home-hero">
+    <div class="home-hero-media" aria-hidden="true">
+      <img src="nexa-logo.png" alt=""/>
+    </div>
+    <div class="home-hero-shade" aria-hidden="true"></div>
+
+    <div class="home-hero-content">
+      <div class="tag fade-up" style="margin-bottom:28px;background:#fff;color:#000">
+        <span class="pulse-dot"></span>
+        Comeback Drop
+      </div>
+      <h1 class="fade-up-2" style="font-family:var(--f-display);font-size:clamp(72px,14vw,160px);line-height:.88;letter-spacing:2px;margin-bottom:32px">
+        THE<br/>COMEBACK.
+      </h1>
+      <p class="fade-up-3" style="font-size:clamp(15px,1.8vw,17px);color:rgba(255,255,255,.68);max-width:420px;line-height:1.75;margin-bottom:44px;font-weight:500">
+        NEXA Comeback Tee. Limited drop, front and back print, built for the return.
+      </p>
+      <div class="hero-cta fade-up-4">
+        <button onclick="goPage('drops')" style="background:#fff;color:#000;border:none;padding:14px 32px;border-radius:var(--r);font-weight:800;font-size:14px;letter-spacing:.8px;text-transform:uppercase">Shop Comeback Drop</button>
+        <button onclick="goPage('delivery')" style="background:transparent;color:#fff;border:2px solid rgba(255,255,255,.72);padding:12px 28px;border-radius:var(--r);font-weight:800;font-size:14px;letter-spacing:.8px;text-transform:uppercase">Delivery Info</button>
+      </div>
+    </div>
+
+    <!-- Stat pills -->
+    <div class="home-hero-stats">
+      <div style="background:var(--black);border-radius:var(--r);padding:12px 18px;text-align:center">
+        <div style="font-family:var(--f-mono);font-weight:700;font-size:16px;color:#fff">100+</div>
+        <div style="font-size:11px;color:rgba(255,255,255,.5);margin-top:2px;letter-spacing:.5px">PIECES</div>
+      </div>
+      <div style="background:var(--black);border-radius:var(--r);padding:12px 18px;text-align:center">
+        <div style="font-family:var(--f-mono);font-weight:700;font-size:16px;color:#fff">48H</div>
+        <div style="font-size:11px;color:rgba(255,255,255,.5);margin-top:2px;letter-spacing:.5px">SELL-OUT</div>
+      </div>
+      <div style="background:var(--black);border-radius:var(--r);padding:12px 18px;text-align:center">
+        <div style="font-family:var(--f-mono);font-weight:700;font-size:16px;color:#fff">7 TND</div>
+        <div style="font-size:11px;color:rgba(255,255,255,.5);margin-top:2px;letter-spacing:.5px">DELIVERY</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Marquee -->
+  <div style="background:var(--black);padding:12px 0;overflow:hidden">
+    <div style="display:flex;animation:marq 16s linear infinite;white-space:nowrap;width:max-content">
+      <span style="font-family:var(--f-display);font-size:18px;color:#fff;margin-right:48px;letter-spacing:3px">NEXA</span>
+      <span style="font-family:var(--f-display);font-size:18px;color:rgba(255,255,255,.25);margin-right:48px;letter-spacing:3px">STREETWEAR</span>
+      <span style="font-family:var(--f-display);font-size:18px;color:rgba(255,255,255,.25);margin-right:48px;letter-spacing:3px">TN ✦</span>
+      <span style="font-family:var(--f-display);font-size:18px;color:#fff;margin-right:48px;letter-spacing:3px">NEXA</span>
+      <span style="font-family:var(--f-display);font-size:18px;color:rgba(255,255,255,.25);margin-right:48px;letter-spacing:3px">STREETWEAR</span>
+      <span style="font-family:var(--f-display);font-size:18px;color:rgba(255,255,255,.25);margin-right:48px;letter-spacing:3px">TN ✦</span>
+      <span style="font-family:var(--f-display);font-size:18px;color:#fff;margin-right:48px;letter-spacing:3px">NEXA</span>
+      <span style="font-family:var(--f-display);font-size:18px;color:rgba(255,255,255,.25);margin-right:48px;letter-spacing:3px">STREETWEAR</span>
+      <span style="font-family:var(--f-display);font-size:18px;color:rgba(255,255,255,.25);margin-right:48px;letter-spacing:3px">TN ✦</span>
+      <span style="font-family:var(--f-display);font-size:18px;color:#fff;margin-right:48px;letter-spacing:3px">NEXA</span>
+      <span style="font-family:var(--f-display);font-size:18px;color:rgba(255,255,255,.25);margin-right:48px;letter-spacing:3px">STREETWEAR</span>
+      <span style="font-family:var(--f-display);font-size:18px;color:rgba(255,255,255,.25);margin-right:48px;letter-spacing:3px">TN ✦</span>
+    </div>
+  </div>
+
+  <!-- Featured -->
+  <section style="padding:72px clamp(16px,5vw,60px);max-width:1160px;margin:0 auto">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:36px;flex-wrap:wrap;gap:12px">
+      <div>
+        <div style="font-family:var(--f-mono);font-size:10px;color:var(--grey);margin-bottom:8px;letter-spacing:2px;text-transform:uppercase">// Featured</div>
+        <h2 style="font-family:var(--f-display);font-size:clamp(40px,6vw,64px);letter-spacing:2px">COMEBACK DROP</h2>
+      </div>
+      <button onclick="goPage('drops')" class="btn-ghost" style="font-weight:700;font-size:13px;letter-spacing:.5px;text-transform:uppercase">View Comeback Drop →</button>
+    </div>
+    <div id="featured-grid" class="product-grid"></div>
+  </section>
+
+  <!-- Stats strip -->
+  <section style="border-top:1px solid var(--grey3);border-bottom:1px solid var(--grey3)">
+    <div class="stats-grid">
+      <div style="text-align:center;padding:48px 12px">
+        <div style="font-family:var(--f-display);font-size:clamp(48px,7vw,80px);color:#fff;letter-spacing:2px">100+</div>
+        <div style="color:rgba(255,255,255,.45);font-size:11px;margin-top:6px;letter-spacing:2px;text-transform:uppercase">Pieces in circulation</div>
+      </div>
+      <div style="text-align:center;padding:48px 12px">
+        <div style="font-family:var(--f-display);font-size:clamp(48px,7vw,80px);color:#fff;letter-spacing:2px">2–3</div>
+        <div style="color:rgba(255,255,255,.45);font-size:11px;margin-top:6px;letter-spacing:2px;text-transform:uppercase">Days delivery</div>
+      </div>
+      <div style="text-align:center;padding:48px 12px">
+        <div style="font-family:var(--f-display);font-size:clamp(48px,7vw,80px);color:#fff;letter-spacing:2px">100%</div>
+        <div style="color:rgba(255,255,255,.45);font-size:11px;margin-top:6px;letter-spacing:2px;text-transform:uppercase">TN Homegrown</div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ══ DROPS PAGE ══ -->
+<div id="page-drops" class="page" style="padding-top:60px;min-height:100svh">
+  <div style="padding:52px clamp(16px,5vw,60px) 80px;max-width:1100px;margin:0 auto">
+    <div style="font-family:var(--f-mono);font-size:10px;color:var(--grey);margin-bottom:10px;letter-spacing:2px;text-transform:uppercase">// Comeback Drop</div>
+    <h1 style="font-family:var(--f-display);font-size:clamp(56px,10vw,110px);letter-spacing:3px;line-height:.9;margin-bottom:56px">THE<br/>COMEBACK</h1>
+    <div id="drops-list"></div>
+  </div>
+</div>
+
+<!-- ══ PRODUCT DETAIL PAGE ══ -->
+<div id="page-product-detail" class="page" style="padding-top:60px;min-height:100svh;background:var(--white)">
+  <div id="product-detail-content"></div>
+</div>
+
+<!-- ══ DELIVERY PAGE ══ -->
+<div id="page-delivery" class="page" style="padding-top:60px;min-height:100svh">
+  <div style="padding:52px clamp(16px,5vw,60px) 80px;max-width:960px;margin:0 auto">
+    <div style="font-family:var(--f-mono);font-size:10px;color:var(--grey);margin-bottom:10px;letter-spacing:2px;text-transform:uppercase">// Delivery</div>
+    <h1 style="font-family:var(--f-display);font-size:clamp(56px,10vw,110px);letter-spacing:3px;line-height:.9;margin-bottom:52px">FAST &amp;<br/>RELIABLE.</h1>
+    <div class="delivery-grid" style="margin-bottom:32px">
+      <div style="background:var(--black);border-radius:var(--r);padding:40px 32px">
+        <div style="font-size:10px;color:rgba(255,255,255,.4);letter-spacing:2px;margin-bottom:12px;font-family:var(--f-mono);text-transform:uppercase">Delivery Fee</div>
+        <div style="font-family:var(--f-display);font-size:80px;color:#fff;line-height:1;letter-spacing:2px">7</div>
+        <div style="font-size:20px;color:rgba(255,255,255,.7);font-weight:700;margin-top:4px">Tunisian Dinar</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.4);margin-top:8px;letter-spacing:.5px">Flat rate • Nationwide</div>
+      </div>
+      <div style="background:var(--bg2);border-radius:var(--r);padding:40px 32px;border:1.5px solid var(--grey3)">
+        <div style="font-size:10px;color:var(--grey);letter-spacing:2px;margin-bottom:12px;font-family:var(--f-mono);text-transform:uppercase">Delivery Time</div>
+        <div style="font-family:var(--f-display);font-size:80px;color:var(--black);line-height:1;letter-spacing:2px">2–3</div>
+        <div style="font-size:20px;color:var(--black);font-weight:700;margin-top:4px">Business Days</div>
+        <div style="font-size:12px;color:var(--grey);margin-top:8px;letter-spacing:.5px">After order confirmation</div>
+      </div>
+    </div>
+    <div style="background:var(--white);border-radius:var(--r);padding:24px 28px;border:1.5px solid var(--grey3);margin-bottom:40px;display:flex;align-items:center;gap:20px;flex-wrap:wrap">
+      <div style="width:48px;height:48px;background:var(--black);border-radius:var(--r);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:22px">💵</div>
+      <div>
+        <div style="font-weight:700;font-size:16px;letter-spacing:.3px">Cash on Delivery</div>
+        <div style="color:var(--grey);font-size:13px;margin-top:3px">Pay when your order arrives. No card needed.</div>
+      </div>
+      <span class="tag tag-live" style="margin-left:auto">Available</span>
+    </div>
+    <h2 style="font-family:var(--f-display);font-size:36px;letter-spacing:2px;margin-bottom:20px">COVERAGE ZONES</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:8px;margin-bottom:52px">
+      <div style="background:var(--white);border-radius:var(--r);padding:14px 16px;border:1.5px solid var(--grey3);display:flex;justify-content:space-between;align-items:center"><div style="font-weight:700;font-size:13px">Tunis Centre</div><span class="tag tag-accent">2 days</span></div>
+      <div style="background:var(--white);border-radius:var(--r);padding:14px 16px;border:1.5px solid var(--grey3);display:flex;justify-content:space-between;align-items:center"><div style="font-weight:700;font-size:13px">La Marsa</div><span class="tag tag-accent">2 days</span></div>
+      <div style="background:var(--white);border-radius:var(--r);padding:14px 16px;border:1.5px solid var(--grey3);display:flex;justify-content:space-between;align-items:center"><div style="font-weight:700;font-size:13px">Ariana</div><span class="tag tag-accent">2–3 days</span></div>
+      <div style="background:var(--white);border-radius:var(--r);padding:14px 16px;border:1.5px solid var(--grey3);display:flex;justify-content:space-between;align-items:center"><div style="font-weight:700;font-size:13px">Ben Arous</div><span class="tag tag-accent">2–3 days</span></div>
+      <div style="background:var(--white);border-radius:var(--r);padding:14px 16px;border:1.5px solid var(--grey3);display:flex;justify-content:space-between;align-items:center"><div style="font-weight:700;font-size:13px">Sfax</div><span class="tag tag-accent">3 days</span></div>
+      <div style="background:var(--white);border-radius:var(--r);padding:14px 16px;border:1.5px solid var(--grey3);display:flex;justify-content:space-between;align-items:center"><div style="font-weight:700;font-size:13px">Sousse</div><span class="tag tag-accent">3 days</span></div>
+    </div>
+    <h2 style="font-family:var(--f-display);font-size:36px;letter-spacing:2px;margin-bottom:20px">HOW IT WORKS</h2>
+    <div class="how-grid">
+      <div style="background:var(--black);border-radius:var(--r);padding:24px 20px">
+        <div style="font-family:var(--f-mono);font-size:22px;color:rgba(255,255,255,.2);margin-bottom:12px;font-weight:700">01</div>
+        <div style="font-weight:700;font-size:15px;color:#fff;margin-bottom:6px;letter-spacing:.3px">Order</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.5);line-height:1.6">Place your order and get a confirmation within 24h.</div>
+      </div>
+      <div style="background:var(--white);border-radius:var(--r);padding:24px 20px;border:1.5px solid var(--grey3)">
+        <div style="font-family:var(--f-mono);font-size:22px;color:var(--grey2);margin-bottom:12px;font-weight:700">02</div>
+        <div style="font-weight:700;font-size:15px;margin-bottom:6px;letter-spacing:.3px">Pack</div>
+        <div style="font-size:12px;color:var(--grey);line-height:1.6">Your piece is carefully prepared at our studio.</div>
+      </div>
+      <div style="background:var(--white);border-radius:var(--r);padding:24px 20px;border:1.5px solid var(--grey3)">
+        <div style="font-family:var(--f-mono);font-size:22px;color:var(--grey2);margin-bottom:12px;font-weight:700">03</div>
+        <div style="font-weight:700;font-size:15px;margin-bottom:6px;letter-spacing:.3px">Ship</div>
+        <div style="font-size:12px;color:var(--grey);line-height:1.6">Handed to our trusted courier.</div>
+      </div>
+      <div style="background:var(--white);border-radius:var(--r);padding:24px 20px;border:1.5px solid var(--grey3)">
+        <div style="font-family:var(--f-mono);font-size:22px;color:var(--grey2);margin-bottom:12px;font-weight:700">04</div>
+        <div style="font-weight:700;font-size:15px;margin-bottom:6px;letter-spacing:.3px">Receive</div>
+        <div style="font-size:12px;color:var(--grey);line-height:1.6">Pay on delivery. Simple.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CHECKOUT PAGE ══ -->
+<div id="page-checkout" class="page" style="padding-top:60px;min-height:100svh">
+  <div style="padding:40px clamp(16px,5vw,40px) 80px;max-width:640px;margin:0 auto">
+    <button onclick="goPage('__back__')" class="btn-ghost" style="margin-bottom:32px;display:flex;align-items:center;gap:6px;text-transform:uppercase;letter-spacing:.5px;font-size:12px;font-weight:700">← Back to cart</button>
+    <h1 style="font-family:var(--f-display);font-size:clamp(48px,8vw,72px);letter-spacing:3px;margin-bottom:40px">CHECKOUT</h1>
+    <div id="checkout-summary" style="background:var(--white);border-radius:var(--r);padding:20px 22px;margin-bottom:28px;border:1.5px solid var(--grey3)"></div>
+    <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:24px">
+      <div>
+        <label style="display:block;font-size:11px;font-weight:700;margin-bottom:6px;color:var(--black);letter-spacing:1px;text-transform:uppercase">Full Name</label>
+        <input class="field" type="text" id="co-name" placeholder="e.g. Ahmed Ben Salem"/>
+      </div>
+      <div>
+        <label style="display:block;font-size:11px;font-weight:700;margin-bottom:6px;color:var(--black);letter-spacing:1px;text-transform:uppercase">Delivery Address</label>
+        <input class="field" type="text" id="co-address" placeholder="Street, city, governorate"/>
+      </div>
+      <div>
+        <label style="display:block;font-size:11px;font-weight:700;margin-bottom:6px;color:var(--black);letter-spacing:1px;text-transform:uppercase">Phone Number</label>
+        <input class="field" type="tel" id="co-phone" placeholder="e.g. +216 55 123 456"/>
+      </div>
+    </div>
+    <div style="background:var(--black);border-radius:var(--r);padding:18px 20px;display:flex;gap:14px;align-items:center;margin-bottom:28px">
+      <span style="font-size:22px">💵</span>
+      <div>
+        <div style="font-weight:700;color:#fff;font-size:15px;letter-spacing:.3px">Cash on Delivery</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.5);margin-top:2px">Pay when your order arrives</div>
+      </div>
+      <span class="tag tag-live" style="margin-left:auto">Selected</span>
+    </div>
+    <button class="btn-primary" onclick="placeOrder()" style="width:100%;font-size:15px;padding:17px;letter-spacing:1.5px">PLACE ORDER</button>
+  </div>
+</div>
+
+<!-- ══ ORDER SUCCESS ══ -->
+<div id="page-success" class="page flex-page" style="min-height:100svh;flex-direction:column;align-items:center;justify-content:center;gap:24px;padding:24px;padding-top:80px;background:var(--white)">
+  <div style="width:80px;height:80px;background:var(--black);border-radius:50%;display:flex;align-items:center;justify-content:center">
+    <svg width="32" height="32" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+  </div>
+  <h2 style="font-family:var(--f-display);font-size:clamp(48px,8vw,72px);text-align:center;letter-spacing:3px">ORDER PLACED!</h2>
+  <p style="color:var(--grey);text-align:center;max-width:300px;font-size:15px;font-weight:500;line-height:1.6">We'll call you to confirm. Thank you for shopping NEXA 🙏</p>
+</div>
+
+<!-- ══ ADMIN LOGIN ══ -->
+<div id="page-admin-login" class="page flex-page" style="min-height:100svh;align-items:center;justify-content:center;padding:24px;background:var(--black)">
+  <div style="background:var(--white);border-radius:var(--r);padding:48px 36px;width:100%;max-width:360px;border:1px solid rgba(255,255,255,.1)">
+    <div style="margin-bottom:14px"><span class="brand-logo brand-logo-lg" aria-label="NEXA"><img src="nexa-logo.png" alt="NEXA"/></span></div>
+    <div style="color:var(--grey);font-size:13px;margin-bottom:36px;letter-spacing:.5px;text-transform:uppercase;font-weight:600">Admin Panel</div>
+    <label style="font-size:11px;font-weight:700;display:block;margin-bottom:8px;letter-spacing:1px;text-transform:uppercase">Password</label>
+    <input class="field" type="password" id="admin-pw" placeholder="Enter password" onkeydown="if(event.key==='Enter')adminLogin()" style="margin-bottom:16px"/>
+    <div id="admin-err" style="color:#C62828;font-size:13px;margin-bottom:12px;display:none;font-weight:600">Incorrect password</div>
+    <button class="btn-primary" onclick="adminLogin()" style="width:100%;padding:14px;letter-spacing:1.5px">ENTER</button>
+  </div>
+</div>
+
+<!-- ══ ADMIN DASHBOARD ══ -->
+<div id="page-admin" class="page" style="min-height:100svh;background:var(--bg);padding-top:0">
+  <div id="admin-topbar" style="background:var(--black);padding:0 clamp(16px,4vw,40px);height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50">
+    <div style="display:flex;align-items:center;gap:16px">
+      <span class="brand-logo brand-logo-sm" aria-label="NEXA"><img src="nexa-logo.png" alt="NEXA"/></span>
+      <span style="background:rgba(255,255,255,.1);color:rgba(255,255,255,.4);font-size:10px;font-family:var(--f-mono);padding:3px 10px;border-radius:2px;letter-spacing:1px;text-transform:uppercase">ADMIN</span>
+    </div>
+    <button onclick="adminLogout()" class="btn-ghost" style="color:rgba(255,255,255,.4);font-size:13px;text-transform:uppercase;letter-spacing:.5px;font-weight:700">Logout →</button>
+  </div>
+  <div id="admin-toast" style="position:fixed;bottom:90px;right:24px;background:var(--black);color:#fff;border-radius:var(--r);padding:12px 20px;box-shadow:var(--shadow-lg);font-size:13px;font-weight:700;letter-spacing:.3px;z-index:999;animation:fadeUp .3s ease;display:none"></div>
+  <div style="padding:clamp(16px,3vw,36px) clamp(16px,4vw,40px) 80px;max-width:1000px;margin:0 auto">
+    <div class="admin-stats" id="admin-stats-grid" style="margin-bottom:28px"></div>
+    <div style="display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap">
+      <button id="tab-products" onclick="adminTab('products')" style="background:var(--black);color:#fff;border:none;border-radius:var(--r);padding:9px 20px;font-weight:700;font-size:12px;letter-spacing:.8px;text-transform:uppercase;transition:all .15s">Products</button>
+      <button id="tab-drops" onclick="adminTab('drops')" style="background:var(--grey3);color:var(--grey);border:none;border-radius:var(--r);padding:9px 20px;font-weight:700;font-size:12px;letter-spacing:.8px;text-transform:uppercase;transition:all .15s">Drop</button>
+      <button id="tab-orders" onclick="adminTab('orders')" style="background:var(--grey3);color:var(--grey);border:none;border-radius:var(--r);padding:9px 20px;font-weight:700;font-size:12px;letter-spacing:.8px;text-transform:uppercase;transition:all .15s">Orders</button>
+    </div>
+    <div id="admin-panel-products"></div>
+    <div id="admin-panel-drops" style="display:none"></div>
+    <div id="admin-panel-orders" style="display:none"></div>
+  </div>
+</div>
+
+<!-- ══ CART DRAWER ══ -->
+<div id="cart-overlay" class="overlay" onclick="closeCart()" style="display:none"></div>
+<aside id="cart-drawer" style="position:fixed;top:0;right:0;bottom:0;width:min(420px,100vw);background:var(--white);z-index:300;display:none;flex-direction:column;box-shadow:-4px 0 40px rgba(0,0,0,.2);border-left:1px solid var(--grey3);animation:slideRight .3s cubic-bezier(.22,1,.36,1)">
+  <div style="padding:22px 24px 18px;border-bottom:1px solid var(--grey3);display:flex;justify-content:space-between;align-items:center">
+    <span style="font-family:var(--f-display);font-size:26px;letter-spacing:2px">YOUR CART</span>
+    <button onclick="closeCart()" class="btn-ghost" style="padding:6px">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div id="cart-items" style="flex:1;overflow-y:auto;padding:16px 24px"></div>
+  <div style="padding:20px 24px 32px;border-top:1px solid var(--grey3)">
+    <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--grey);margin-bottom:6px;font-weight:600"><span>Subtotal</span><span id="cart-subtotal">0 TND</span></div>
+    <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--grey);margin-bottom:16px;font-weight:600"><span>Delivery</span><span>7 TND</span></div>
+    <div style="display:flex;justify-content:space-between;font-weight:800;font-size:20px;margin-bottom:20px;letter-spacing:.5px">
+      <span>Total</span><span style="font-family:var(--f-mono)" id="cart-total">7 TND</span>
+    </div>
+    <button class="btn-primary" id="checkout-btn" onclick="goCheckout()" style="width:100%;letter-spacing:1.5px" disabled>PROCEED TO CHECKOUT</button>
+  </div>
+</aside>
+
+<!-- ══ FOOTER ══ -->
+<footer id="main-footer" style="background:var(--black);color:rgba(255,255,255,.5);padding:52px clamp(16px,5vw,60px) 40px;border-top:1px solid rgba(255,255,255,.06)">
+  <div style="max-width:1100px;margin:0 auto">
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:40px;margin-bottom:48px">
+      <div>
+        <div style="margin-bottom:14px"><span class="brand-logo" aria-label="NEXA"><img src="nexa-logo.png" alt="NEXA"/></span></div>
+        <p style="font-size:13px;line-height:1.8;max-width:200px;font-weight:500">Born from the streets of Tunisia. Every piece is a statement.</p>
+      </div>
+      <div>
+        <div style="color:#fff;font-weight:800;margin-bottom:16px;letter-spacing:1px;text-transform:uppercase;font-size:12px">Navigate</div>
+        <button onclick="goPage('home')" style="display:block;background:none;border:none;color:rgba(255,255,255,.4);font-size:13px;margin-bottom:10px;transition:color .15s;padding:0;font-family:var(--f-sans);font-weight:600;text-transform:uppercase;letter-spacing:.5px" onmouseenter="this.style.color='#fff'" onmouseleave="this.style.color='rgba(255,255,255,.4)'">Home</button>
+        <button onclick="goPage('drops')" style="display:block;background:none;border:none;color:rgba(255,255,255,.4);font-size:13px;margin-bottom:10px;transition:color .15s;padding:0;font-family:var(--f-sans);font-weight:600;text-transform:uppercase;letter-spacing:.5px" onmouseenter="this.style.color='#fff'" onmouseleave="this.style.color='rgba(255,255,255,.4)'">Comeback Drop</button>
+        <button onclick="goPage('delivery')" style="display:block;background:none;border:none;color:rgba(255,255,255,.4);font-size:13px;margin-bottom:10px;transition:color .15s;padding:0;font-family:var(--f-sans);font-weight:600;text-transform:uppercase;letter-spacing:.5px" onmouseenter="this.style.color='#fff'" onmouseleave="this.style.color='rgba(255,255,255,.4)'">Delivery</button>
+      </div>
+      <div>
+        <div style="color:#fff;font-weight:800;margin-bottom:16px;letter-spacing:1px;text-transform:uppercase;font-size:12px">Contact</div>
+        <div style="font-size:13px;line-height:2.2;font-weight:500">
+          <a href="https://www.instagram.com/nexa_futuristic/" target="_blank" rel="noopener" style="color:rgba(255,255,255,.5);text-decoration:none" onmouseenter="this.style.color='#fff'" onmouseleave="this.style.color='rgba(255,255,255,.5)'">Instagram: @nexa_futuristic</a><br/>
+          <a href="https://www.tiktok.com/@nexa_futuristic" target="_blank" rel="noopener" style="color:rgba(255,255,255,.5);text-decoration:none" onmouseenter="this.style.color='#fff'" onmouseleave="this.style.color='rgba(255,255,255,.5)'">TikTok: @nexa_futuristic</a><br/>
+          Tunisia
+        </div>
+      </div>
+    </div>
+    <div style="border-top:1px solid rgba(255,255,255,.06);padding-top:24px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-size:11px;font-family:var(--f-mono);letter-spacing:.5px;text-transform:uppercase">
+      <span>© 2026 NEXA. All rights reserved.</span>
+      <span>TN Streetwear</span>
+    </div>
+  </div>
+</footer>
+
+<!-- Floating admin button -->
+<button id="admin-fab" onclick="goPage('admin')" title="Admin Panel"
+  style="position:fixed;bottom:24px;right:24px;z-index:500;width:44px;height:44px;background:var(--black);color:rgba(255,255,255,.5);border:none;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 4px 20px rgba(0,0,0,.3);transition:all .2s"
+  onmouseenter="this.style.background='#333';this.style.color='#fff';this.style.transform='scale(1.1)'"
+  onmouseleave="this.style.background='var(--black)';this.style.color='rgba(255,255,255,.5)';this.style.transform='scale(1)'">⚙</button>
+
+<script>
+/* ══ DATA ══ */
+const SEED_PRODUCTS = [
+  {id:1,name:"NEXA Comeback Tee",price:50,category:"Tee",dropId:1,soldOut:true,images:[
+    {src:"front.png",alt:"NEXA Comeback Tee front"},
+    {src:"back.png",alt:"NEXA Comeback Tee back"}
+  ]},
+];
+const SEED_DROPS = [
+  {id:1,name:"Drop 001 — The Comeback",date:"2026-06-10T18:00:00",live:true,desc:"The comeback tee. Front and back print, limited run."},
+];
+
+/* ══ STORAGE ══ */
+const store = {
+  get(k){try{const v=localStorage.getItem(k);return v?JSON.parse(v):null}catch{return null}},
+  set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch{}}
+};
+
+/* ══ STATE ══ */
+let products = store.get('nexa_products') || SEED_PRODUCTS;
+let drops    = store.get('nexa_drops')    || SEED_DROPS;
+const DATA_VERSION = 4;
+if ((store.get('nexa_data_version') || 1) < DATA_VERSION) {
+  products = SEED_PRODUCTS;
+  drops = SEED_DROPS;
+  store.set('nexa_products', products);
+  store.set('nexa_drops', drops);
+  store.set('nexa_data_version', DATA_VERSION);
+}
+let cart     = [];
+let currentPage = 'home';
+let prevPage    = 'drops';
+let adminAuth   = false;
+let adminCurrentTab = 'products';
+const countdownIntervals = {};
+
+/* ══ NAV ══ */
+function goPage(p) {
+  if (p === '__back__') {
+    document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
+    const target = document.getElementById('page-' + prevPage) || document.getElementById('page-drops');
+    if (target) target.classList.add('active');
+    document.getElementById('navbar').style.display = 'flex';
+    document.getElementById('main-footer').style.display = 'block';
+    document.getElementById('admin-fab').style.display = 'flex';
+    currentPage = prevPage;
+    if (prevPage === 'home') renderFeatured();
+    if (prevPage === 'drops') renderDrops();
+    openCart();
+    return;
+  }
+
+  const nav = document.getElementById('navbar');
+  const footer = document.getElementById('main-footer');
+  const fab = document.getElementById('admin-fab');
+
+  document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
+
+  if (p === 'admin') {
+    if (!adminAuth) {
+      document.getElementById('page-admin-login').classList.add('active');
+    } else {
+      document.getElementById('page-admin').classList.add('active');
+      renderAdmin();
+    }
+    nav.style.display = 'none';
+    footer.style.display = 'none';
+    fab.style.display = 'none';
+    currentPage = 'admin';
+    return;
+  }
+
+  nav.style.display = 'flex';
+  footer.style.display = 'block';
+  fab.style.display = 'flex';
+
+  const el = document.getElementById('page-' + p);
+  if (el) { el.classList.add('active'); window.scrollTo(0,0); }
+
+  document.querySelectorAll('.nav-link').forEach(b => b.classList.remove('active'));
+  const nb = document.getElementById('nav-' + p);
+  if (nb) nb.classList.add('active');
+
+  currentPage = p;
+  if (p === 'home') renderFeatured();
+  if (p === 'drops') renderDrops();
+}
+
+/* ══ SCROLL NAV ══ */
+window.addEventListener('scroll', () => {
+  const nav = document.getElementById('navbar');
+  if (window.scrollY > 30) {
+    nav.style.background = 'rgba(247,247,245,.97)';
+    nav.style.backdropFilter = 'blur(12px)';
+    nav.style.borderBottom = '1px solid var(--grey3)';
+  } else {
+    nav.style.background = 'transparent';
+    nav.style.backdropFilter = 'none';
+    nav.style.borderBottom = '1px solid transparent';
+  }
+});
+
+/* ══ MOBILE MENU ══ */
+function openMobileMenu() {
+  document.getElementById('mobile-overlay').style.display = 'block';
+  const d = document.getElementById('mobile-drawer');
+  d.style.display = 'flex';
+  d.style.animation = 'slideLeft .3s cubic-bezier(.22,1,.36,1)';
+}
+function closeMobileMenu() {
+  document.getElementById('mobile-overlay').style.display = 'none';
+  document.getElementById('mobile-drawer').style.display = 'none';
+}
+
+/* ══ CATEGORY COLORS (B&W) ══ */
+const CAT_BG = {
+  Hoodie:['#0A0A0A','#1F1F1F'],
+  Tee:['#1A1A1A','#2E2E2E'],
+  Bottoms:['#0F0F0F','#222'],
+  Jacket:['#050505','#1A1A1A'],
+};
+const CAT_SVG = {
+  Hoodie:`<path d="M15 26L7 46h16v30h34V46h16l-8-20L52 18q-7-6-14 0z" stroke="white" stroke-width="1.5" fill="none" stroke-linejoin="round"/>`,
+  Tee:`<path d="M18 22L8 42h18v28h30V42h18l-12-20q-6-8-18-8t-18 8z" stroke="white" stroke-width="1.5" fill="none" stroke-linejoin="round"/>`,
+  Bottoms:`<path d="M16 16h58v44l-14 14-14-8-14 8-16-14z" stroke="white" stroke-width="1.5" fill="none" stroke-linejoin="round"/><line x1="45" y1="16" x2="45" y2="60" stroke="white" stroke-width="1.2"/>`,
+  Jacket:`<path d="M12 24L4 48h20v30h30V48h20l-8-24-14-10-9 12-9-12z" stroke="white" stroke-width="1.5" fill="none" stroke-linejoin="round"/>`,
+};
+
+function productCardHTML(p) {
+  const [c1, c2] = CAT_BG[p.category] || ['#111','#222'];
+  const svgShape = CAT_SVG[p.category] || '';
+  const opacity = p.soldOut ? 0.2 : 0.9;
+  const imageViews = Array.isArray(p.images) ? p.images : [];
+  const hasImages = imageViews.length > 0;
+  const hoverEnter = p.soldOut ? '' : `onmouseenter="this.style.background='#222'"`;
+  const hoverLeave = p.soldOut ? '' : `onmouseleave="this.style.background='var(--black)'"`;
+  const mediaHTML = hasImages
+    ? `
+      <div style="position:absolute;inset:0;background:#f4f4f2;display:flex;align-items:center;justify-content:center">
+        ${imageViews.map((img,i)=>`
+        <img src="${img.src}" alt="${img.alt || p.name}" data-product-image="${p.id}" data-image-index="${i}"
+          style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:6px;background:#f4f4f2;transition:opacity .2s;opacity:${i===0 ? 1 : 0};z-index:${i===0 ? 2 : 1}"/>`).join('')}
+      </div>
+      ${imageViews.length > 1 ? `
+      <div style="position:absolute;right:10px;bottom:10px;display:flex;gap:5px;z-index:4">
+        ${imageViews.map((img,i)=>`
+        <button type="button" onclick="setProductImage(event,${p.id},${i})" aria-label="${i===0 ? 'Show front view' : 'Show back view'}"
+          style="width:28px;height:24px;border:1px solid rgba(0,0,0,.2);background:${i===0 ? 'var(--black)' : 'rgba(255,255,255,.92)'};color:${i===0 ? '#fff' : 'var(--black)'};border-radius:var(--r);font-size:9px;font-family:var(--f-mono);font-weight:700;letter-spacing:.5px">
+          ${i===0 ? 'FR' : 'BK'}
+        </button>`).join('')}
+      </div>` : ''}`
+    : `
+      <div style="position:absolute;inset:0;background:radial-gradient(circle at 30% 30%,rgba(255,255,255,.06),transparent 60%)"></div>
+      <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);background-size:20px 20px"></div>
+      <svg width="90" height="90" viewBox="0 0 90 90" style="opacity:${opacity};position:relative;z-index:1">${svgShape}</svg>`;
+  return `
+  <div class="product-card" onclick="openProductDetail(${p.id})" style="cursor:pointer">
+    <div style="height:200px;background:linear-gradient(135deg,${c1},${c2});position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden">
+      ${mediaHTML}
+      ${p.soldOut
+        ? `<div style="position:absolute;inset:0;background:rgba(0,0,0,.65);display:flex;align-items:center;justify-content:center"><span class="tag tag-sold">Sold Out</span></div>`
+        : `<span class="tag tag-live" style="position:absolute;top:12px;left:12px;z-index:5">${p.category}</span>`}
+    </div>
+    <div style="padding:16px 16px 18px">
+      <div style="font-weight:800;font-size:15px;margin-bottom:2px;letter-spacing:.2px">${p.name}</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:12px">
+        <span style="font-family:var(--f-mono);font-size:16px;font-weight:700;color:var(--black)">${p.price} TND</span>
+        <button onclick="event.stopPropagation();addToCart(${p.id})" ${p.soldOut ? 'disabled' : ''}
+          style="background:${p.soldOut ? 'var(--grey3)' : 'var(--black)'};color:${p.soldOut ? 'var(--grey)' : '#fff'};border:none;border-radius:var(--r);padding:8px 16px;font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;transition:background .15s;cursor:${p.soldOut ? 'not-allowed' : 'pointer'}"
+          ${hoverEnter} ${hoverLeave}>
+          ${p.soldOut ? 'Sold Out' : 'Add to Cart'}
+        </button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function setProductImage(event, productId, imageIndex) {
+  event.stopPropagation();
+  document.querySelectorAll(`[data-product-image="${productId}"]`).forEach(img => {
+    const active = Number(img.dataset.imageIndex) === imageIndex;
+    img.style.opacity = active ? '1' : '0';
+    img.style.zIndex = active ? '2' : '1';
+  });
+  event.currentTarget.parentElement.querySelectorAll('button').forEach((btn, i) => {
+    const active = i === imageIndex;
+    btn.style.background = active ? 'var(--black)' : 'rgba(255,255,255,.92)';
+    btn.style.color = active ? '#fff' : 'var(--black)';
+  });
+}
+
+function openProductDetail(productId) {
+  const p = products.find(x => x.id === productId);
+  if (!p) return;
+  prevPage = currentPage === 'product-detail' ? 'drops' : currentPage;
+  renderProductDetail(p);
+  goPage('product-detail');
+}
+
+function renderProductDetail(p) {
+  const images = Array.isArray(p.images) && p.images.length ? p.images : [];
+  const heroImages = images.length ? images : [{src:'',alt:p.name}];
+  document.getElementById('product-detail-content').innerHTML = `
+    <div style="padding:30px clamp(16px,5vw,64px) 80px;max-width:1180px;margin:0 auto">
+      <button onclick="goPage(prevPage || 'drops')" class="btn-ghost" style="display:flex;align-items:center;gap:8px;margin-bottom:28px;color:var(--black)">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+        Back
+      </button>
+      <div class="product-detail-grid">
+        <div class="product-detail-gallery" style="display:grid;grid-template-columns:1fr;gap:14px">
+          ${heroImages.map((img,i)=>`
+          <div style="background:#f4f4f2;border:1.5px solid var(--grey3);border-radius:var(--r);overflow:hidden;min-height:320px;display:flex;align-items:center;justify-content:center">
+            ${img.src
+              ? `<img src="${img.src}" alt="${img.alt || p.name}" style="display:block;width:100%;height:100%;max-height:640px;object-fit:contain;background:#f4f4f2"/>`
+              : `<div style="font-family:var(--f-display);font-size:48px;color:var(--grey2);letter-spacing:2px">${p.category}</div>`}
+          </div>`).join('')}
+        </div>
+        <div class="product-detail-sidebar" style="position:sticky;top:84px">
+          <div class="tag tag-live" style="margin-bottom:18px">${p.category}</div>
+          <h1 style="font-family:var(--f-display);font-size:clamp(54px,7vw,96px);line-height:.9;letter-spacing:2px;margin-bottom:18px">${p.name.toUpperCase()}</h1>
+          <div style="font-family:var(--f-mono);font-size:28px;font-weight:700;margin-bottom:24px">${p.price} TND</div>
+          <p style="font-size:15px;line-height:1.8;color:var(--grey);font-weight:500;margin-bottom:28px">
+            Black oversized tee with NEXA front print and full comeback back graphic. Built for the comeback drop.
+          </p>
+          <div style="border-top:1.5px solid var(--grey3);border-bottom:1.5px solid var(--grey3);padding:20px 0;margin-bottom:28px;display:grid;gap:14px">
+            <div style="display:flex;justify-content:space-between;gap:16px;font-size:13px">
+              <span style="color:var(--grey);font-weight:700;text-transform:uppercase;letter-spacing:.8px">Color</span>
+              <span style="font-weight:800">Black</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;gap:16px;font-size:13px">
+              <span style="color:var(--grey);font-weight:700;text-transform:uppercase;letter-spacing:.8px">Fit</span>
+              <span style="font-weight:800">Oversized</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;gap:16px;font-size:13px">
+              <span style="color:var(--grey);font-weight:700;text-transform:uppercase;letter-spacing:.8px">Delivery</span>
+              <span style="font-weight:800">2-3 days · 7 TND</span>
+            </div>
+          </div>
+          <div style="margin-bottom:18px">
+            <div style="font-size:11px;color:var(--grey);letter-spacing:1.5px;text-transform:uppercase;font-family:var(--f-mono);margin-bottom:10px">Size</div>
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
+              ${['S','M','L','XL'].map((size,i)=>`
+              <button type="button" onclick="selectProductSize(event)" style="height:44px;border:1.5px solid ${i===1 ? 'var(--black)' : 'var(--grey3)'};background:${i===1 ? 'var(--black)' : 'var(--white)'};color:${i===1 ? '#fff' : 'var(--black)'};border-radius:var(--r);font-family:var(--f-mono);font-weight:700">${size}</button>`).join('')}
+            </div>
+          </div>
+          <button class="btn-primary" onclick="addToCart(${p.id})" ${p.soldOut ? 'disabled' : ''} style="width:100%;padding:16px 24px;margin-bottom:12px">
+            ${p.soldOut ? 'Sold Out' : 'Add to Cart'}
+          </button>
+          <button class="btn-outline" onclick="goPage('delivery')" style="width:100%;padding:14px 24px">Delivery Info</button>
+        </div>
+      </div>
+    </div>`;
+}
+
+function selectProductSize(event) {
+  const group = event.currentTarget.parentElement;
+  group.querySelectorAll('button').forEach(btn => {
+    btn.style.background = 'var(--white)';
+    btn.style.color = 'var(--black)';
+    btn.style.borderColor = 'var(--grey3)';
+  });
+  event.currentTarget.style.background = 'var(--black)';
+  event.currentTarget.style.color = '#fff';
+  event.currentTarget.style.borderColor = 'var(--black)';
+}
+
+/* ══ FEATURED ══ */
+function renderFeatured() {
+  const featured = products.slice(0, 3);
+  document.getElementById('featured-grid').innerHTML = featured.map(productCardHTML).join('');
+}
+
+/* ══ DROPS ══ */
+function renderDrops() {
+  Object.values(countdownIntervals).forEach(clearInterval);
+  document.getElementById('drops-list').innerHTML = drops.map(d => dropHTML(d)).join('');
+  drops.forEach(d => { if (!d.live) startCountdown(d.id, d.date); });
+}
+
+function dropHTML(d) {
+  const items = products.filter(p => p.dropId === d.id);
+  return `
+  <div style="background:var(--white);border-radius:var(--r);overflow:hidden;border:1.5px solid var(--grey3);margin-bottom:20px">
+    <div style="padding:28px clamp(16px,4vw,36px) 24px;background:${d.live ? 'var(--black)' : 'var(--bg2)'}">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap">
+        <div>
+          <span class="tag ${d.live ? 'tag-live' : 'tag-soon'}" style="margin-bottom:16px">
+            ${d.live ? `<span class="pulse-dot-white"></span>Live Now` : 'Upcoming'}
+          </span>
+          <h2 style="font-family:var(--f-display);font-size:clamp(24px,4vw,42px);color:${d.live ? '#fff' : 'var(--black)'};line-height:1;margin-bottom:10px;margin-top:10px;letter-spacing:2px">${d.name.toUpperCase()}</h2>
+          <p style="font-size:13px;color:${d.live ? 'rgba(255,255,255,.5)' : 'var(--grey)'};font-weight:500">${d.desc}</p>
+        </div>
+        ${d.live ? `
+          <div style="background:rgba(255,255,255,.1);border-radius:var(--r);padding:18px 24px;text-align:center;border:1px solid rgba(255,255,255,.1)">
+            <div style="font-family:var(--f-display);font-size:40px;color:#fff;letter-spacing:3px">GO</div>
+            <div style="font-size:10px;color:rgba(255,255,255,.5);margin-top:2px;letter-spacing:2px;text-transform:uppercase">Shop Now</div>
+          </div>` : `
+          <div class="cd-grid" id="cd-${d.id}">
+            ${['d','h','m','s'].map((k,i)=>`
+            <div style="background:var(--white);border-radius:var(--r);padding:10px 14px;text-align:center;min-width:54px;border:1.5px solid var(--grey3)">
+              <div style="font-family:var(--f-mono);font-size:20px;font-weight:700;color:var(--black)" id="cd-${d.id}-${k}">--</div>
+              <div style="font-size:9px;color:var(--grey);margin-top:2px;letter-spacing:1px;text-transform:uppercase">${['DAYS','HRS','MIN','SEC'][i]}</div>
+            </div>`).join('')}
+          </div>`}
+      </div>
+    </div>
+    ${d.live && items.length > 0 ? `
+    <div style="padding:28px clamp(16px,4vw,36px) 32px">
+      <div style="font-family:var(--f-mono);font-size:10px;color:var(--grey);letter-spacing:2px;margin-bottom:20px;text-transform:uppercase">${items.length} piece${items.length!==1?'s':''} in drop</div>
+      <div class="product-grid">${items.map(productCardHTML).join('')}</div>
+    </div>` : ''}
+    ${!d.live ? `<div style="padding:18px clamp(16px,4vw,36px);color:var(--grey);font-size:13px;font-weight:500;border-top:1px solid var(--grey3)">Stay tuned — details dropping soon.</div>` : ''}
+  </div>`;
+}
+
+function startCountdown(id, dateStr) {
+  const tick = () => {
+    const diff = new Date(dateStr) - new Date();
+    if (diff <= 0) { clearInterval(countdownIntervals[id]); return; }
+    const set = (k, v) => { const el = document.getElementById(`cd-${id}-${k}`); if (el) el.textContent = String(v).padStart(2,'0'); };
+    set('d', Math.floor(diff/86400000));
+    set('h', Math.floor((diff%86400000)/3600000));
+    set('m', Math.floor((diff%3600000)/60000));
+    set('s', Math.floor((diff%60000)/1000));
+  };
+  tick();
+  countdownIntervals[id] = setInterval(tick, 1000);
+}
+
+/* ══ CART ══ */
+function addToCart(productId) {
+  const p = products.find(x => x.id === productId);
+  if (!p || p.soldOut) return;
+  const ex = cart.find(i => i.id === productId);
+  if (ex) ex.qty++;
+  else cart.push({...p, qty:1});
+  updateCartUI();
+  openCart();
+}
+
+function removeFromCart(productId) {
+  cart = cart.filter(i => i.id !== productId);
+  updateCartUI();
+  renderCartItems();
+}
+
+function updateCartUI() {
+  const qty = cart.reduce((s,i) => s+i.qty, 0);
+  const btn = document.getElementById('cart-btn');
+  const cc  = document.getElementById('cart-count');
+  cc.style.display = qty > 0 ? 'inline' : 'none';
+  if (qty > 0) cc.textContent = qty;
+  renderCartItems();
+}
+
+function renderCartItems() {
+  const el  = document.getElementById('cart-items');
+  const sub = cart.reduce((s,i) => s + i.price*i.qty, 0);
+  document.getElementById('cart-subtotal').textContent = sub + ' TND';
+  document.getElementById('cart-total').textContent = (sub + 7) + ' TND';
+  document.getElementById('checkout-btn').disabled = cart.length === 0;
+
+  if (cart.length === 0) {
+    el.innerHTML = `<div style="text-align:center;padding-top:60px;color:var(--grey)">
+      <svg width="40" height="40" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+      <p style="margin-top:14px;font-size:14px;font-weight:600;letter-spacing:.3px">Your cart is empty</p></div>`;
+    return;
+  }
+  el.innerHTML = cart.map(item => `
+    <div style="display:flex;gap:14px;align-items:center;padding:14px 0;border-bottom:1px solid var(--grey3)">
+      <div style="width:52px;height:52px;background:var(--black);border-radius:var(--r);flex-shrink:0"></div>
+      <div style="flex:1;min-width:0">
+        <div style="font-weight:700;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${item.name}</div>
+        <div style="font-size:12px;color:var(--grey);margin-top:2px;font-weight:600">Qty: ${item.qty}</div>
+      </div>
+      <span style="font-family:var(--f-mono);font-size:14px;font-weight:700;white-space:nowrap">${item.price * item.qty} TND</span>
+      <button onclick="removeFromCart(${item.id})" class="btn-ghost" style="padding:4px">
+        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+      </button>
+    </div>`).join('');
+}
+
+function openCart() {
+  document.getElementById('cart-overlay').style.display = 'block';
+  document.getElementById('cart-drawer').style.display = 'flex';
+  renderCartItems();
+}
+function closeCart() {
+  document.getElementById('cart-overlay').style.display = 'none';
+  document.getElementById('cart-drawer').style.display = 'none';
+}
+
+/* ══ CHECKOUT ══ */
+function goCheckout() {
+  prevPage = currentPage;
+  closeCart();
+  const sub = cart.reduce((s,i) => s + i.price*i.qty, 0);
+  document.getElementById('checkout-summary').innerHTML = `
+    <div style="font-family:var(--f-mono);font-size:10px;color:var(--grey);letter-spacing:2px;margin-bottom:14px;text-transform:uppercase">Order Summary</div>
+    ${cart.map(i => `<div style="display:flex;justify-content:space-between;font-size:13px;color:var(--grey);padding:5px 0;font-weight:600"><span>${i.name} ×${i.qty}</span><span style="font-family:var(--f-mono)">${i.price*i.qty} TND</span></div>`).join('')}
+    <div style="border-top:1px solid var(--grey3);margin-top:10px;padding-top:10px;display:flex;justify-content:space-between;font-size:13px;color:var(--grey);font-weight:600"><span>Delivery</span><span style="font-family:var(--f-mono)">7 TND</span></div>
+    <div style="display:flex;justify-content:space-between;font-weight:800;font-size:18px;margin-top:8px;letter-spacing:.3px"><span>Total</span><span style="font-family:var(--f-mono)">${sub+7} TND</span></div>`;
+  document.getElementById('co-name').value = '';
+  document.getElementById('co-address').value = '';
+  document.getElementById('co-phone').value = '';
+  document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
+  document.getElementById('page-checkout').classList.add('active');
+  document.getElementById('navbar').style.display = 'flex';
+  document.getElementById('main-footer').style.display = 'none';
+  document.getElementById('admin-fab').style.display = 'flex';
+  currentPage = 'checkout';
+  window.scrollTo(0,0);
+}
+
+function placeOrder() {
+  const name    = document.getElementById('co-name').value.trim();
+  const address = document.getElementById('co-address').value.trim();
+  const phone   = document.getElementById('co-phone').value.trim();
+  if (!name || !address || !phone) { alert('Please fill in all fields.'); return; }
+  const total = cart.reduce((s,i) => s + i.price*i.qty, 0) + 7;
+  const order = {id:Date.now(), name, address, phone, cart:[...cart], total, payment:'Cash on Delivery', date:new Date().toISOString()};
+  const prev = store.get('nexa_orders') || [];
+  store.set('nexa_orders', [...prev, order]);
+  cart = [];
+  updateCartUI();
+  document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
+  document.getElementById('page-success').classList.add('active');
+  document.getElementById('navbar').style.display = 'flex';
+  document.getElementById('main-footer').style.display = 'none';
+  setTimeout(() => {
+    document.getElementById('main-footer').style.display = 'block';
+    goPage('home');
+  }, 2800);
+}
+
+/* ══ ADMIN ══ */
+function adminLogin() {
+  const pw = document.getElementById('admin-pw').value;
+  if (pw === 'nexa2026') {
+    adminAuth = true;
+    document.getElementById('admin-err').style.display = 'none';
+    goPage('admin');
+  } else {
+    document.getElementById('admin-err').style.display = 'block';
+    document.getElementById('admin-pw').value = '';
+    setTimeout(() => document.getElementById('admin-err').style.display = 'none', 1600);
+  }
+}
+
+function adminLogout() {
+  adminAuth = false;
+  document.getElementById('navbar').style.display = 'flex';
+  document.getElementById('main-footer').style.display = 'block';
+  document.getElementById('admin-fab').style.display = 'flex';
+  goPage('home');
+}
+
+function adminFlash(msg) {
+  const t = document.getElementById('admin-toast');
+  t.textContent = msg;
+  t.style.display = 'block';
+  setTimeout(() => t.style.display = 'none', 2500);
+}
+
+function adminTab(tab) {
+  adminCurrentTab = tab;
+  ['products','drops','orders'].forEach(t => {
+    document.getElementById('tab-'+t).style.background = t===tab ? 'var(--black)' : 'var(--grey3)';
+    document.getElementById('tab-'+t).style.color = t===tab ? '#fff' : 'var(--grey)';
+    document.getElementById('admin-panel-'+t).style.display = t===tab ? 'block' : 'none';
+  });
+  if (tab === 'orders') renderAdminOrders();
+}
+
+function renderAdmin() {
+  renderAdminStats();
+  renderAdminProducts();
+  renderAdminDrops();
+  renderAdminOrders();
+  adminTab('products');
+}
+
+function renderAdminStats() {
+  const orders = store.get('nexa_orders') || [];
+  document.getElementById('admin-stats-grid').innerHTML = [
+    [products.length,'Products'],
+    [products.filter(p=>p.soldOut).length,'Sold Out'],
+    [orders.length,'Orders'],
+    [drops.length,'Drop'],
+  ].map(([v,l]) => `<div style="background:var(--white);border-radius:var(--r);padding:20px;border:1.5px solid var(--grey3)">
+    <div style="font-family:var(--f-mono);font-size:28px;font-weight:700;color:var(--black)">${v}</div>
+    <div style="font-size:11px;color:var(--grey);margin-top:4px;text-transform:uppercase;letter-spacing:.8px;font-weight:700">${l}</div>
+  </div>`).join('');
+}
+
+function renderAdminProducts() {
+  document.getElementById('admin-panel-products').innerHTML = `
+    <div style="background:var(--white);border-radius:var(--r);padding:24px;border:1.5px solid var(--grey3);margin-bottom:16px">
+      <h3 style="font-family:var(--f-display);font-size:24px;letter-spacing:1px;margin-bottom:18px">ADD PRODUCT</h3>
+      <div class="admin-form-row" style="margin-bottom:12px">
+        <input class="field" id="np-name" placeholder="Product name"/>
+        <input class="field" id="np-price" placeholder="Price (TND)" type="number"/>
+        <select class="field" id="np-category">
+          ${['Tee','Hoodie','Bottoms','Jacket','Accessories'].map(c=>`<option>${c}</option>`).join('')}
+        </select>
+      </div>
+      <div style="margin-bottom:16px">
+        <select class="field" id="np-drop">${drops.map(d=>`<option value="${d.id}">${d.name}</option>`).join('')}</select>
+      </div>
+      <button class="btn-primary" onclick="adminAddProduct()" style="display:flex;align-items:center;gap:8px;padding:11px 24px;letter-spacing:1px">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        ADD PRODUCT
+      </button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      ${products.map(p => `
+        <div style="background:var(--white);border-radius:var(--r);padding:14px 18px;border:1.5px solid var(--grey3);display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+          <div style="flex:1;min-width:160px">
+            <div style="font-weight:800;font-size:14px;letter-spacing:.2px">${p.name}</div>
+            <div style="font-size:12px;color:var(--grey);margin-top:2px;font-weight:600">${p.category} · <span style="font-family:var(--f-mono)">${p.price} TND</span></div>
+          </div>
+          <span class="tag ${p.soldOut?'tag-sold':'tag-live'}">${p.soldOut?'Sold Out':'Available'}</span>
+          <button onclick="adminToggleSold(${p.id})" class="btn-outline" style="padding:7px 14px;font-size:11px;letter-spacing:.5px">${p.soldOut?'Mark Available':'Mark Sold Out'}</button>
+          <button onclick="adminDelProduct(${p.id})" style="background:#111;border:none;color:#fff;border-radius:var(--r);padding:8px 12px;font-size:12px;font-weight:700">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+          </button>
+        </div>`).join('')}
+    </div>`;
+}
+
+function renderAdminDrops() {
+  document.getElementById('admin-panel-drops').innerHTML = `
+    <div style="background:var(--white);border-radius:var(--r);padding:24px;border:1.5px solid var(--grey3);margin-bottom:16px">
+      <h3 style="font-family:var(--f-display);font-size:24px;letter-spacing:1px;margin-bottom:18px">ADD DROP</h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+        <input class="field" id="nd-name" placeholder="Drop name"/>
+        <input class="field" id="nd-date" type="datetime-local"/>
+      </div>
+      <input class="field" id="nd-desc" placeholder="Short description" style="margin-bottom:12px"/>
+      <label style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--grey);margin-bottom:16px;cursor:pointer;font-weight:600">
+        <input type="checkbox" id="nd-live" style="width:16px;height:16px"/> Set as Live now
+      </label>
+      <button class="btn-primary" onclick="adminAddDrop()" style="display:flex;align-items:center;gap:8px;padding:11px 24px;letter-spacing:1px">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        ADD DROP
+      </button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      ${drops.map(d => `
+        <div style="background:var(--white);border-radius:var(--r);padding:16px 18px;border:1.5px solid var(--grey3);display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+          <div style="flex:1;min-width:160px">
+            <div style="font-weight:800;font-size:14px">${d.name}</div>
+            <div style="font-size:11px;color:var(--grey);margin-top:2px;font-family:var(--f-mono)">${new Date(d.date).toLocaleString()}</div>
+          </div>
+          <span class="tag ${d.live?'tag-live':'tag-soon'}">${d.live?'● Live':'Upcoming'}</span>
+          <button onclick="adminToggleLive(${d.id})" class="btn-outline" style="padding:7px 14px;font-size:11px;letter-spacing:.5px">${d.live?'Set Upcoming':'Set Live'}</button>
+        </div>`).join('')}
+    </div>`;
+}
+
+function renderAdminOrders() {
+  const orders = store.get('nexa_orders') || [];
+  document.getElementById('admin-panel-orders').innerHTML = orders.length === 0
+    ? `<div style="text-align:center;padding:60px 20px;color:var(--grey);font-size:14px;font-weight:600;letter-spacing:.5px;text-transform:uppercase">No orders yet.</div>`
+    : orders.map(o => `
+      <div style="background:var(--white);border-radius:var(--r);padding:20px 22px;border:1.5px solid var(--grey3);margin-bottom:10px">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:12px">
+          <div>
+            <div style="font-weight:800;font-size:15px">${o.name}</div>
+            <div style="font-size:12px;color:var(--grey);margin-top:2px;font-weight:600">${o.phone}</div>
+            <div style="font-size:12px;color:var(--grey);font-weight:600">${o.address}</div>
+            <div style="font-family:var(--f-mono);font-size:10px;color:var(--grey2);margin-top:4px">${new Date(o.date).toLocaleString()}</div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-family:var(--f-mono);font-size:20px;font-weight:700">${o.total} TND</div>
+            <span class="tag tag-accent" style="margin-top:6px">Cash on Delivery</span>
+          </div>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px">
+          ${(o.cart||[]).map(item => `<span class="tag tag-soon">${item.name} ×${item.qty}</span>`).join('')}
+        </div>
+        <button onclick="adminDelOrder(${o.id})" style="background:#111;border:none;color:#fff;border-radius:var(--r);padding:7px 16px;font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;display:flex;align-items:center;gap:6px">
+          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+          Remove Order
+        </button>
+      </div>`).join('');
+}
+
+function adminAddProduct() {
+  const name = document.getElementById('np-name').value.trim();
+  const price = document.getElementById('np-price').value;
+  const category = document.getElementById('np-category').value;
+  const dropId = Number(document.getElementById('np-drop').value);
+  if (!name || !price) { adminFlash('Fill name and price.'); return; }
+  products = [...products, {id:Date.now(), name, price:Number(price), category, dropId, soldOut:false}];
+  store.set('nexa_products', products);
+  adminFlash('Product added!');
+  renderAdminStats(); renderAdminProducts();
+}
+
+function adminToggleSold(id) {
+  products = products.map(p => p.id===id ? {...p, soldOut:!p.soldOut} : p);
+  store.set('nexa_products', products);
+  adminFlash('Updated!');
+  renderAdminStats(); renderAdminProducts();
+}
+
+function adminDelProduct(id) {
+  products = products.filter(p => p.id !== id);
+  store.set('nexa_products', products);
+  adminFlash('Deleted.');
+  renderAdminStats(); renderAdminProducts();
+}
+
+function adminAddDrop() {
+  const name = document.getElementById('nd-name').value.trim();
+  const date = document.getElementById('nd-date').value;
+  const desc = document.getElementById('nd-desc').value.trim();
+  const live = document.getElementById('nd-live').checked;
+  if (!name || !date) { adminFlash('Fill name and date.'); return; }
+  drops = [...drops, {id:Date.now(), name, date, desc, live}];
+  store.set('nexa_drops', drops);
+  adminFlash('Drop added!');
+  renderAdminStats(); renderAdminDrops();
+}
+
+function adminToggleLive(id) {
+  drops = drops.map(d => d.id===id ? {...d, live:!d.live} : d);
+  store.set('nexa_drops', drops);
+  adminFlash('Updated!');
+  renderAdminDrops();
+}
+
+function adminDelOrder(id) {
+  const orders = (store.get('nexa_orders')||[]).filter(o => o.id !== id);
+  store.set('nexa_orders', orders);
+  renderAdminStats(); renderAdminOrders();
+}
+
+/* ══ INIT ══ */
+goPage('home');
+</script>
+</body>
+</html>
