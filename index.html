@@ -542,7 +542,7 @@ let adminAuth   = false;
 let adminCurrentTab = 'products';
 const countdownIntervals = {};
 const LAUNCH_COUNTDOWN_KEY = 'nexa_comeback_countdown_target';
-const LAUNCH_COUNTDOWN_DAYS = 5;
+const LAUNCH_COUNTDOWN_TARGET = Date.parse('2026-06-09T00:00:00+01:00');
 let launchCountdownInterval = null;
 
 /* ══ NAV ══ */
@@ -861,12 +861,8 @@ function startCountdown(id, dateStr) {
 }
 
 function getLaunchCountdownTarget() {
-  let target = Number(store.get(LAUNCH_COUNTDOWN_KEY));
-  if (!target || Number.isNaN(target)) {
-    target = Date.now() + LAUNCH_COUNTDOWN_DAYS * 86400000;
-    store.set(LAUNCH_COUNTDOWN_KEY, target);
-  }
-  return target;
+  store.set(LAUNCH_COUNTDOWN_KEY, LAUNCH_COUNTDOWN_TARGET);
+  return LAUNCH_COUNTDOWN_TARGET;
 }
 
 function startLaunchCountdown() {
